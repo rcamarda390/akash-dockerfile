@@ -1,0 +1,17 @@
+#
+export  AKASH_NET="https://raw.githubusercontent.com/ovrclk/net/master/mainnet"
+
+export AKASH_VERSION="$(curl -s "$AKASH_NET/version.txt")"
+export AKASH_CHAIN_ID="$(curl -s "$AKASH_NET/chain-id.txt")"
+export AKASH_NODE="$(curl -s "$AKASH_NET/rpc-nodes.txt" | shuf -n 1)"
+
+echo This is akash version: $AKASH_VERSION
+echo This is akash chain id: $AKASH_CHAIN_ID
+echo This is akash node: $AKASH_NODE
+# --no-cache
+docker build  -t akash \
+  --build-arg AKASH_NODE="$(curl -s "$AKASH_NET/rpc-nodes.txt" | shuf -n 1)" \
+  --build-arg AKASH_VERSION="$(curl -s "$AKASH_NET/version.txt")" \
+  --build-arg AKASH_CHAIN_ID="$(curl -s "$AKASH_NET/chain-id.txt")" .
+
+# docker run -ti --rm --net=host akash
